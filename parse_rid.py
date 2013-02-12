@@ -93,3 +93,10 @@ for subcat in subcategory_count:
 	percentages[subcat] = ratio * 100
 
 print sorted(percentages.iteritems(), key=operator.itemgetter(1))
+
+s = ""
+for elem in RID['SECONDARY']['NO_CATEGORY']['ABSTRACT_TOUGHT']:
+	s += elem.lower() + ' '
+
+print s
+
