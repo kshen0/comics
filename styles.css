@@ -1,7 +1,16 @@
+html {
+	overflow-y: scroll;
+}
+
+body {
+	font-family: 'Helvetica', 'Arial', sans-serif;
+}
+
 #container {
 	height: 100%;
 	width: 100%;
 }
+
 #images-box {
 	margin: 100px auto 0 auto;
     text-align: justify;
@@ -29,5 +38,6 @@
 
 #stats {
 	width: 700px;
+	min-height: 500px;
 	margin: 0 auto;
 }

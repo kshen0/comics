@@ -26,7 +26,7 @@ word_associations = {
 
 $(".face").hover(
 	function() {
-		$("#stats").html(calvin_percentages[this.id] + "<br>" + word_associations[this.id]);
+		$("#stats").html("<h3>" + calvin_percentages[this.id] + "</h3><br>" + word_associations[this.id]);
 	},
 	function() {
 		$("#stats").html("");
