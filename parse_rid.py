@@ -38,9 +38,14 @@ def read_rid():
 							  'subcategory': subcategory } 
 
 			if word[-1] == '*':
+				'''	
 				if len(word) - 1 not in prefixes:
 					prefixes[len(word) - 1] = {} 
 				prefixes[len(word) - 1][word[:-1]] = categorization
+				'''
+				if len(word) not in prefixes:
+					prefixes[len(word)] = {} 
+				prefixes[len(word)][word] = categorization
 			else:
 				whole_words[word] = categorization
 	f.close()
@@ -77,8 +82,9 @@ def process_textfile(filename):
 			categorization = whole_words[word]
 		else:
 			for n in prefixes:
-				prefix = word[:n]
+				prefix = word[:n] + '*'
 				if prefix in prefixes[n]:
+					word += '*'
 					categorization = prefixes[n][prefix]
 		if categorization:
 			increment_freqs(word)

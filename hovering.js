@@ -53,8 +53,8 @@ imagesBox.append($('<span class="stretch"></span>'));
 $(".tile").hover(
 	function() {
 		var info = calvinCategoryInfo[this.id];
-		//$("#stats").html("<h3>" + calvinCategoryInfo[this.id][name] + "</h3><br>" + word_associations[this.id]);
-		$("#stats").html("<h3>" + translations[info['name']]+ "</h3><br>" + getWordsAsString(info));
+		var percent = Math.floor(info['percent'] * 100) / 100; // round to 2 decimal places
+		$("#stats").html("<h3>" + translations[info['name']] + ": " + percent +  "%</h3><br>" + getWordsAsString(info));
 	},
 	function() {
 		$("#stats").html("");
@@ -71,7 +71,10 @@ function getWordsAsString(info) {
 	var wordlist = info['words'];
 	for(var i = 0; i < wordlist.length; i ++) {
 		var word = wordlist[i];
-		str += wordlist[i].toLowerCase() + ' ';
+		if(word in frequencies) {
+			word = '<strong>' + word + '</strong>';	
+		}
+		str += word.toLowerCase() + ' ';
 	}
 	wordAssociations['name'] = str;
 	return str;
