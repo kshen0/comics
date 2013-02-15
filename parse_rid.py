@@ -108,9 +108,33 @@ def write_category_info():
 	# sort descending by percentage
 	percentages = sorted(percentages.iteritems(), key=operator.itemgetter(1), reverse=True)[:num_categories]
 
+	# create set of categories we care about
+	categories = [] 
+	cat_map = {}
+	for (category, percent) in percentages:
+		entry = {
+					"name": category, 
+					"percent": percent
+				}
+		cat_map[category] = entry
+		categories.append(entry)
+
+
+	# iterate over RID to find words associated with categories we care about
+	# in this case, category refers to the second level and subcategory refers to the ones we care about
+	# sorry, that's ugly
+	for process in RID:
+		for category in RID[process]:
+			for subcategory in RID[process][category]:
+				if subcategory in cat_map:
+					# add list of words to output
+					cat_map[subcategory]["words"] = RID[process][category][subcategory]
+
+
+
 	# write top 10 categories to json file
 	with open('./calvindata/category_info.json', 'w') as outfile:
-		json.dump(percentages, outfile)
+		json.dump(categories, outfile)
 
 num_categories = 10 # top x number of categories
 
