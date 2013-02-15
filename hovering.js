@@ -1,3 +1,52 @@
+// Set async to false so we load all data before proceeding
+$.ajaxSetup( {"async": false} );
+
+// load percentages for categories
+var calvin_percentages = [];
+$.getJSON('./calvindata/category_info.json', function(data) {
+	calvin_percentages = data;
+});
+
+// load name mappings (e.g. INSTRU_BEHAVIOR --> Instrumenal Behavior)
+var translations = {};
+$.getJSON('./translations.json', function(data) {
+	translations = data;
+});
+
+// load RID
+var RID = {};
+$.getJSON('./RID.json', function(data) {
+	RID = data;
+});
+
+// insert images and top 10 text into 
+
+$(".face").hover(
+	function() {
+		$("#stats").html("<h3>" + calvin_percentages[this.id] + "</h3><br>" + word_associations[this.id]);
+	},
+	function() {
+		$("#stats").html("");
+	}
+);
+
+// load word associations for all top percentage categories
+/*
+function load_word_associations() {
+	var word_associations = {};
+	for (process in RID) {
+		for (category in process) {
+			for (subcategory in category) {
+				word_associations[subcategory] = 
+			}
+		}
+	}
+
+};
+*/
+
+
+/*
 calvin_percentages = {
 	"morality": "Moral Imperative: 2.58%",
 	"affection": "Affection: 3.27%",
@@ -23,12 +72,5 @@ word_associations = {
 	"concreteness": "acros* afar* afield* ahead* along* among* apart* asid* at away* back* behind* besid* between* center* centr* circl* clos* closer* corner* curv* distanc* distant* east* eastern* everywher* extend* extensiv* extent* far farther* flat* forward* front* further* here hither* insid* interior* layer* length* level* long* middl* midst* narrow* near* nearby* nearer* nearest* off open* out outing* outs outsid* outward* over* plac* point* posit* rear* region* round* separat* side sided sides siding* situat* somewher* south* spac* spaciou* spatial squar* straight* surfac* surround* thenc* thither* tip tipp* tips toward* west* western* wher* wherever* wide* width* within*",
 	"abstract": "diverse diversification diversified diversity evident evidential guess* logistic abstract* almost* alternativ* analy* attribut* axiom* basic* belief* believ* calculat* caus* certain* characteriz* choic* choos* chos* circumstanc* comprehend* compar* comprehens* conditional* concentrat* concept* conclud* conjectur* consequenc* consequent* consider* contriv* criter* criteria* decid* deem* defin* deliberat* determin* differenc* different* distinct* distinguish* doctrin* effect* establish* estimat* evaluat* evidenc* examin* exampl* except* fact facts featur* figur* forethought* formulat* gues* history* idea* importanc* important* informat* interpret* interpretat* judg* judgment* knew* know* learn* logic* may meant* mistak* mistaken* mistook* model* opin* otherwis* perhap* plan* possi* predicat* predict* probab* probabl* problem* proof* prov* purpos* quali* quant* re-analy* re-examin* rational* real reality* reason* reasonabl* reconsider* reexamin* reformulat* reinterpretat* relearn* relevanc* relevant* research* resolv* schem* scienc* scientific* select* significanc* solut* someth* somewhat* sourc* subject* suppos* sure surely tend* them* theor* think* thinker* thought* topic* true truly truth* ttt1 understand* understood* weigh weighed* weighing* weighs why"
 }
+*/
 
-$(".face").hover(
-	function() {
-		$("#stats").html("<h3>" + calvin_percentages[this.id] + "</h3><br>" + word_associations[this.id]);
-	},
-	function() {
-		$("#stats").html("");
-	}
-);
