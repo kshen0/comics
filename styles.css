@@ -1,9 +1,13 @@
 html {
-	overflow-y: scroll;
+    overflow: auto;
 }
 
 body {
 	font-family: 'Helvetica', 'Arial', sans-serif;
+}
+
+h3 {
+    display: inline;
 }
 
 #container {
@@ -11,12 +15,19 @@ body {
 	width: 100%;
 }
 
-#images-box {
-	margin: 100px auto 0 auto;
-    text-align: justify;
+.onecomic {
+    display: block;
+    margin: 40px 0 0 0;
+    overflow: auto;
+}
+
+.images-box {
+    /*margin: 0 auto;*/
+    float: left;
     -ms-text-justify: distribute-all-lines;
     text-justify: distribute-all-lines;
-    width: 700px;
+    width: 590px;
+    overflow: none;
 }
 
 .tile {
@@ -26,7 +37,6 @@ body {
     display: inline-block;
     *display: inline;
     zoom: 1;
-    z-index: 10;
 }
 
 .stretch {
@@ -36,8 +46,11 @@ body {
     line-height: 0
 }
 
-#stats {
-	width: 700px;
-	min-height: 500px;
-	margin: 0 auto;
+.wordlist {
+    margin-top: 15px;
+    color: #8A8687;
+    float: left;
+    width: 700px;
+    font-size: 8pt;
 }
+

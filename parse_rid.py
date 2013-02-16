@@ -63,7 +63,7 @@ def increment_freqs(word):
 	if word not in word_freqs:
 		word_freqs[word] = 0
 	word_freqs[word] += 1
-
+'''
 def process_textfile(filename):
 	global total_categorized
 	f = open(filename, 'r')
@@ -74,6 +74,7 @@ def process_textfile(filename):
 	for i in xrange(1, len(transcript), 2):
 		for word in transcript[i].translate(string.maketrans("",""), string.punctuation).split(" "):
 			wordlist.append(word.upper())
+	print len(wordlist)
 
 	# tally each word
 	for word in wordlist:
@@ -91,19 +92,38 @@ def process_textfile(filename):
 			total_categorized += 1
 			record(categorization)
 '''
-print process_count['SECONDARY'] / total_categorized - process_count['PRIMARY'] / total_categorized 
-print category_count
-print subcategory_count
-print "total categorized: ", total_categorized
-print "total words: ", len(wordlist)
-'''
+def process_textfile(filename):
+	global total_categorized
+	f = open(filename, 'r')
+	wordlist = []
 
-def write_word_frequencies():
+	for i, line in enumerate(f):
+		if i % 2 == 1:
+			new_words = line.translate(string.maketrans("",""), string.punctuation).split()
+			wordlist += [word.upper() for word in new_words]
+
+	# tally each word
+	for word in wordlist:
+		categorization = None
+		if word in whole_words:
+			categorization = whole_words[word]
+		else:
+			for n in prefixes:
+				prefix = word[:n] + '*'
+				if prefix in prefixes[n]:
+					word += '*'
+					categorization = prefixes[n][prefix]
+		if categorization:
+			increment_freqs(word)
+			total_categorized += 1
+			record(categorization)
+
+def write_word_frequencies(filepath):
 	'''Write word frequencies to json file'''
-	with open('./calvindata/word_freqs.json', 'w') as outfile:
+	with open(filepath, 'w') as outfile:
 		json.dump(word_freqs, outfile)
 
-def write_category_info():
+def write_category_info(filepath):
 	'''Writes the top 10 categories to json file'''
 	# compute the percentage of words that fall into every category
 	percentages = {}
@@ -139,10 +159,34 @@ def write_category_info():
 
 
 	# write top 10 categories to json file
-	with open('./calvindata/category_info.json', 'w') as outfile:
+	with open(filepath, 'w') as outfile:
 		json.dump(categories, outfile)
 
 num_categories = 10 # top x number of categories
+
+def init():
+	global words
+	global category_info
+	global process_count
+	global category_count
+	global subcategory_count
+	global word_freqs
+	global total_categorized
+
+	words = [] # words in the text file
+	category_info = {} # maps category to info: percentage, parent category, parent process, words found in text that belong in this category (?)
+
+	# keep track of the number of words that fall into each process, category, and subcategory
+	for p in process_count:
+		process_count[p] = 0
+	for c in category_count:
+		category_count[c] = 0
+	for s in subcategory_count:
+		subcategory_count[s] = 0
+
+	word_freqs = {} # number of times each word that has a match in the RID appears in the text file
+	total_categorized = 0 # total number of words that found a match in the RID after processing
+
 
 RID = {}
 words = [] # words in the text file
@@ -160,9 +204,15 @@ word_freqs = {} # number of times each word that has a match in the RID appears 
 total_categorized = 0 # total number of words that found a match in the RID after processing
 
 read_rid()
-process_textfile('ch_transcript.txt')
-write_word_frequencies()
-write_category_info()
+process_textfile('ch_transcript2.txt')
+write_word_frequencies('./calvindata/word_freqs.json')
+write_category_info('./calvindata/category_info.json')
+init()
+process_textfile('garfield_transcript.txt')
+write_word_frequencies('./garfielddata/word_freqs.json')
+write_category_info('./garfielddata/category_info.json')
+
+
 
 '''
 # write RID to json file
