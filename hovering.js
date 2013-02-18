@@ -35,7 +35,7 @@ var wordAssociations = {};
 insertImages(
 				{
 					"div": "#calvin-images",
-					"filenamePrefix": "/img/calvin_",
+					"filenamePrefix": "./img/calvin_",
 					"categoryInfo": calvinCategoryInfo,
 					"class": "calvin-tile",
 					"onclick": 'toggleClicked("calvin")',
@@ -44,7 +44,7 @@ insertImages(
 insertImages(
 				{
 					"div": "#garfield-images",
-					"filenamePrefix": "/img/garfield_",
+					"filenamePrefix": "./img/garfield_",
 					"categoryInfo": garfieldCategoryInfo,
 					"class": "garfield-tile",
 					"onclick": 'toggleClicked("garfield")',

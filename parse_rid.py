@@ -93,7 +93,6 @@ def process_textfile(filename):
 			record(categorization)
 '''
 def process_textfile(filename):
-	global total_categorized
 	f = open(filename, 'r')
 	wordlist = []
 
@@ -102,6 +101,10 @@ def process_textfile(filename):
 			new_words = line.translate(string.maketrans("",""), string.punctuation).split()
 			wordlist += [word.upper() for word in new_words]
 
+	tally_words(wordlist)
+
+def tally_words(wordlist):
+	global total_categorized
 	# tally each word
 	for word in wordlist:
 		categorization = None
@@ -117,6 +120,31 @@ def process_textfile(filename):
 			increment_freqs(word)
 			total_categorized += 1
 			record(categorization)
+
+def parse_garkov_transcript():
+	'''Parses transcript format provided by author of Garkov'''
+	f = open('_garf.txt', 'r')
+	wordlist = []
+
+	for line in f:
+		new_words = line.translate(string.maketrans("",""), string.punctuation).split()
+		# if not comment
+		if len(new_words) > 0 and "#" not in new_words[0]:
+			wordlist += [word.upper() for word in new_words[1:]]
+
+	tally_words(wordlist)
+
+def parse_hamlet():
+	'''Parses transcript of hamlet'''
+	f = open('hamlet.txt', 'r')
+	wordlist = []
+
+	for line in f:
+		new_words = line.translate(string.maketrans("",""), string.punctuation).split()
+		if len(new_words) > 0:
+			wordlist += [word.upper() for word in new_words]
+
+	tally_words(wordlist)
 
 def write_word_frequencies(filepath):
 	'''Write word frequencies to json file'''
@@ -209,8 +237,13 @@ write_word_frequencies('./calvindata/word_freqs.json')
 write_category_info('./calvindata/category_info.json')
 init()
 process_textfile('garfield_transcript.txt')
+parse_garkov_transcript()
 write_word_frequencies('./garfielddata/word_freqs.json')
 write_category_info('./garfielddata/category_info.json')
+init()
+parse_hamlet()
+write_word_frequencies('hamlet_freq.json')
+write_category_info('hamlet_cats.json')
 
 
 
