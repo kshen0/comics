@@ -134,9 +134,9 @@ def parse_garkov_transcript():
 
 	tally_words(wordlist)
 
-def parse_hamlet():
-	'''Parses transcript of hamlet'''
-	f = open('hamlet.txt', 'r')
+def parse_naive(filepath):
+	'''Parses every word of a text file'''
+	f = open(filepath, 'r')
 	wordlist = []
 
 	for line in f:
@@ -151,7 +151,7 @@ def write_word_frequencies(filepath):
 	with open(filepath, 'w') as outfile:
 		json.dump(word_freqs, outfile)
 
-def write_category_info(filepath):
+def write_category_info(filepath, verbose=False):
 	'''Writes the top 10 categories to json file'''
 	# compute the percentage of words that fall into every category
 	percentages = {}
@@ -180,7 +180,7 @@ def write_category_info(filepath):
 	for process in RID:
 		for category in RID[process]:
 			for subcategory in RID[process][category]:
-				if subcategory in cat_map:
+				if subcategory in cat_map and verbose:
 					# add list of words to output
 					cat_map[subcategory]["words"] = RID[process][category][subcategory]
 
@@ -233,18 +233,25 @@ total_categorized = 0 # total number of words that found a match in the RID afte
 
 read_rid()
 process_textfile('ch_transcript2.txt')
-write_word_frequencies('./calvindata/word_freqs.json')
-write_category_info('./calvindata/category_info.json')
+#write_word_frequencies('./calvindata/word_freqs.json')
+#write_category_info('./calvindata/category_info.json', True)
+p = process_count["PRIMARY"] / float(process_count["PRIMARY"] + process_count["SECONDARY"])
+print str(p)
 init()
 process_textfile('garfield_transcript.txt')
 parse_garkov_transcript()
-write_word_frequencies('./garfielddata/word_freqs.json')
-write_category_info('./garfielddata/category_info.json')
-init()
-parse_hamlet()
-write_word_frequencies('hamlet_freq.json')
-write_category_info('hamlet_cats.json')
+#write_word_frequencies('./garfielddata/word_freqs.json')
+#write_category_info('./garfielddata/category_info.json', True)
+p = process_count["PRIMARY"] / float(process_count["PRIMARY"] + process_count["SECONDARY"])
+print str(p)
 
+# for parsing of speeches, etc for your own curiosity
+'''
+init()
+parse_naive('filepath')
+write_word_frequencies('output1.json')
+write_category_info('output2.json')
+'''
 
 
 '''
