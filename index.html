@@ -7,6 +7,8 @@
 		<title>Calvin vs Garfield</title>
 	</head>
 	<body>
+		<div id="about" onclick="hideAbout()"></div>
+		<div id="greyout" onclick="hideAbout()"></div>
 		<div id="container">
 			<div class="onecomic">
 				<div id="calvin-images" class="images-box"></div>
@@ -16,6 +18,7 @@
 				<div id="garfield-images" class="images-box"></div>
 				<div class="wordlist" id="garfield-stats"></div>
 			</div>
+			<img title="About" id="about-img" src="./img/about.png" onclick="showAbout()"/>
 			<p>Data from the <a href="http://www.kovcomp.co.uk/wordstat/RID.html">Regressive Imagery Dictionary</a>
 			<p>Calvin & Hobbes © Bill Watterson
 		</container>

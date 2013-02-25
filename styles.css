@@ -4,6 +4,7 @@ html {
 
 body {
 	font-family: 'Helvetica', 'Arial', sans-serif;
+    font-size: 10pt;
 }
 
 h3 {
@@ -13,11 +14,59 @@ h3 {
 #container {
 	height: 100%;
 	width: 100%;
+    padding: 40px 0 0 0;
+}
+
+#greyout {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: absolute;
+    background-color: #000;
+    opacity: .75;
+    display: none;
+    margin: -8px 0 0 -8px;
+}
+
+#about-img {
+    cursor: pointer;
+    cursor: hand;
+}
+
+#about {
+    z-index: 10;
+
+    padding: 10px;
+
+    font-size: 10pt;
+
+    color: black;
+    display: none;
+
+    width: 800px;
+    height: 350px;
+    top: 50%;
+    left: 50%;
+    margin-left: -400px;
+    margin-top: -175px;
+
+    background: #fff;
+    /*
+    background: #000;
+    opacity: .7;
+    */
+
+
+    position: absolute;
+
+    -moz-box-shadow: 0 0 5px #888;
+    -webkit-box-shadow: 0 0 5px#888;
+    box-shadow: 0 0 5px #888;
 }
 
 .onecomic {
     display: block;
-    margin: 40px 0 0 0;
+    margin: 0px 0 0 0;
     overflow: auto;
 }
 
@@ -27,7 +76,10 @@ h3 {
     -ms-text-justify: distribute-all-lines;
     text-justify: distribute-all-lines;
     width: 590px;
+    height: 240px;
     overflow: none;
+    cursor: hand;
+    cursor: pointer;
 }
 
 .tile {
@@ -51,6 +103,7 @@ h3 {
     color: #8A8687;
     float: left;
     width: 700px;
+    height: 240px;
     font-size: 8pt;
 }
 

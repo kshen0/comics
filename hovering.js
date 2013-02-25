@@ -30,6 +30,10 @@ $.getJSON('./garfielddata/word_freqs.json', function(data) {
 	garfield_frequencies = data;
 });
 
+$('#about').load('about.html', function() {
+	setTimeout(function() { showAbout(); }, 2500);
+});
+
 var wordAssociations = {};
 
 insertImages(
@@ -50,6 +54,16 @@ insertImages(
 					"onclick": 'toggleClicked("garfield")',
 				}
 			);
+
+function showAbout() {
+	$('#about').fadeIn('slow', function() {});
+	$('#greyout').fadeIn('slow', function() {});
+};
+
+function hideAbout() {
+	$('#about').fadeOut('slow', function() {});
+	$('#greyout').fadeOut('slow', function() {});
+};
 
 function insertImages(params) {
 	//var imagesBox = $('#images-box');
@@ -75,7 +89,8 @@ function insertImages(params) {
 					'id': i,
 					'onclick': params['onclick'],
 				})
-			.append(img);
+			.append(img)
+			.addClass(name);
 		imagesBox.append(imgdiv);
 	}
 
@@ -88,20 +103,17 @@ var clicked = {"calvin": false, "garfield": false};
 $(".calvin-tile").hover(
 	function() {
 		if(!clicked["calvin"]) {
-			var info = calvinCategoryInfo[this.id];
-			var percent = Math.floor(info['percent'] * 100) / 100; // round to 2 decimal places
-			var params = {
-				"charName": "calvin",
-				"info": info,
-				"freq": calvin_frequencies,
-			}
-			$("#calvin-stats").html("<h3>" + translations[info['name']] + ": " + percent +  "%</h3><br>" + '<div class="wordlist"><p>' + getWordsAsString(params) + "</div>");
+			var name = calvinCategoryInfo[this.id]['name'];
+			displayStats(name);
 		}
 	},
 	function() {
 		if(!clicked["calvin"]) {
+			var name = calvinCategoryInfo[this.id]['name'];
 			$("#calvin-percent").html("");
 			$("#calvin-stats").html("");
+			$(".pane").css("display", "none");
+			removePanes(name);
 		}
 	}
 );
@@ -109,29 +121,76 @@ $(".calvin-tile").hover(
 $(".garfield-tile").hover(
 	function() {
 		if(!clicked["garfield"]) {
-			var info = garfieldCategoryInfo[this.id];
-			var percent = Math.floor(info['percent'] * 100) / 100; // round to 2 decimal places
-			var params = {
-				"charName": "garfield",
-				"info": info,
-				"freq": garfield_frequencies,
-			}
-			$("#garfield-percent")
-				.html("<h4>" + translations[info['name']] + ": " + percent + "%</h4>")
-				.css("height", "25px");
-
-			$("#garfield-stats").html("<h3>" + translations[info['name']] + ": " + percent +  "%</h3><br>" + '<div class="wordlist"><p>' + getWordsAsString(params) + "</div>");
+			var name = garfieldCategoryInfo[this.id]['name'];
+			displayStats(name);
 		}
 	},
 	function() {
 		if(!clicked["garfield"]) {
+			var name = garfieldCategoryInfo[this.id]['name'];
 			$("#garfield-percent").html("");
 			$("#garfield-stats").html("");
+			$(".pane").css("display", "none");
+			removePanes(name);
 		}
 	}
 );
 
-// TODO: grey out other boxes
+function removePanes(name) {
+	$("."+name).each(function(i, obj) {
+		if (i == 0) {
+			var imgStr = 'img/calvin_' + name + '.png';
+		}
+		else {
+			var imgStr = 'img/garfield_' + name + '.png';
+		}
+		$(this).children().attr('src', imgStr);
+	});
+};	
+
+function displayStats(name) {
+	$("."+name).each(function(i, obj) {
+		if (i == 0) {
+			var imgStr = 'img/panes/calvin_' + name + '_pane.png';
+		}
+		if (i == 1) {
+			var imgStr = 'img/panes/garfield_' + name + '_pane.png';
+		}
+		$(this).children().attr('src', imgStr);
+	});
+
+	var info = getCategoryInfoByName(name, calvinCategoryInfo); 
+	var params = {
+		"charName": "calvin",
+		"info": info, 
+		"freq": calvin_frequencies,
+	}
+	var percent = Math.floor(info['percent'] * 100) / 100; // round to 2 decimal places
+	$("#calvin-stats").html("<h3>" + translations[name] + ": " + 
+							percent +  "%</h3><br>" + '<div class="wordlist"><p>' + 
+							getWordsAsString(params) + "</div>");
+
+	info = getCategoryInfoByName(name, garfieldCategoryInfo); 
+	params = {
+		"charName": "garfield",
+		"info": info,
+		"freq": garfield_frequencies,
+	}
+	percent = Math.floor(info['percent'] * 100) / 100; // round to 2 decimal places
+	$("#garfield-stats").html("<h3>" + translations[name] + ": " + 
+							  percent +  "%</h3><br>" + '<div class="wordlist"><p>' + 
+							  getWordsAsString(params) + "</div>");
+};
+
+function getCategoryInfoByName(name, categoryInfo) {
+	for (var i = 0; i < categoryInfo.length; i ++) {
+		if (categoryInfo[i]['name'] == name) {
+			return categoryInfo[i];
+		}	
+	}
+	return null;
+};
+
 function toggleClicked(comicChar) {
 	clicked[comicChar] = !clicked[comicChar];
 	toggleModal();
@@ -153,7 +212,6 @@ function getWordsAsString(params) {
 	var info = params["info"];
 	var name = params["charName"] + info['name'];
 	var frequencies = params["freq"];
-	console.log(name);
 	if(name in wordAssociations) {
 		return wordAssociations[name];
 	}

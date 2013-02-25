@@ -215,6 +215,22 @@ def init():
 	word_freqs = {} # number of times each word that has a match in the RID appears in the text file
 	total_categorized = 0 # total number of words that found a match in the RID after processing
 
+def process_calvin():
+	print 'Processing Calvin & Hobbes transcript'
+	process_textfile('ch_transcript2.txt')
+	write_word_frequencies('./calvindata/word_freqs.json')
+	write_category_info('./calvindata/category_info.json', True)
+	p = process_count["PRIMARY"] / float(process_count["PRIMARY"] + process_count["SECONDARY"])
+	print str(p)
+
+def process_garfield():
+	init()
+	process_textfile('garfield_transcript.txt')
+	parse_garkov_transcript()
+	write_word_frequencies('./garfielddata/word_freqs.json')
+	write_category_info('./garfielddata/category_info.json', True)
+	p = process_count["PRIMARY"] / float(process_count["PRIMARY"] + process_count["SECONDARY"])
+	print str(p)
 
 RID = {}
 words = [] # words in the text file
@@ -232,18 +248,9 @@ word_freqs = {} # number of times each word that has a match in the RID appears 
 total_categorized = 0 # total number of words that found a match in the RID after processing
 
 read_rid()
-process_textfile('ch_transcript2.txt')
-#write_word_frequencies('./calvindata/word_freqs.json')
-#write_category_info('./calvindata/category_info.json', True)
-p = process_count["PRIMARY"] / float(process_count["PRIMARY"] + process_count["SECONDARY"])
-print str(p)
-init()
-process_textfile('garfield_transcript.txt')
-parse_garkov_transcript()
-#write_word_frequencies('./garfielddata/word_freqs.json')
-#write_category_info('./garfielddata/category_info.json', True)
-p = process_count["PRIMARY"] / float(process_count["PRIMARY"] + process_count["SECONDARY"])
-print str(p)
+process_calvin()
+process_garfield()
+
 
 # for parsing of speeches, etc for your own curiosity
 '''
@@ -253,9 +260,7 @@ write_word_frequencies('output1.json')
 write_category_info('output2.json')
 '''
 
-
-'''
-# write RID to json file
-with open('RID.json', 'w') as outfile:
-	json.dump(RID, outfile)
-'''
+def write_RID_to_json():
+	'''write RID to json file'''
+	with open('RID.json', 'w') as outfile:
+		json.dump(RID, outfile)
