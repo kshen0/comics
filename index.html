@@ -3,25 +3,54 @@
 	<head>
 		<link rel="stylesheet" href="styles.css" text="text/css">
 		<!--<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>	-->
-		<script type="text/javascript" src="jquery-1.9.0.min.js"></script>
+		<script type="text/javascript" src="js/jquery-1.9.0.min.js"></script>
+		<script type="text/javascript" src="js/jquery.sparkline.min.js"></script>
 		<title>Calvin vs Garfield</title>
 	</head>
 	<body>
+		<h2>Breaking down word content in Calvin & Hobbes and Garfield</h2>
 		<div id="about" onclick="hideAbout()"></div>
 		<div id="greyout" onclick="hideAbout()"></div>
 		<div id="container">
-			<div class="onecomic">
-				<div id="calvin-images" class="images-box"></div>
-				<div class="wordlist" id="calvin-stats"></div>
+			<div id="comics">
+				<div class="onecomic">
+					<span id="calvin-chart" class="chart"></span>
+					<div id="calvin-images" class="images-box"></div>
+					<!--<div class="wordlist" id="calvin-stats"></div>-->
+				</div>
+				<!--
+				<div id="x-axis">
+					<div>Concreteness</div>
+					<div>Abstract Thought</div>
+					<div>Temporal</div>
+					<div>Social Behavior</div>
+					<div>Vision</div>
+					<div>Instrumental Behavior</div>
+					<div>Orality</div>
+					<div>Affection</div>
+					<div>Moral Imperative</div>
+				</div>
+				-->
+
+				<div class="onecomic">
+					<div id="garfield-images" class="images-box"></div>
+					<span id="garfield-chart" class="chart"></span>
+					<!--<div class="wordlist" id="garfield-stats"></div>-->
+				</div>
 			</div>
-			<div class="onecomic">
-				<div id="garfield-images" class="images-box"></div>
-				<div class="wordlist" id="garfield-stats"></div>
+			<div class="wordlist" id="calvin-stats"></div>
+			<div id="otherstuff">
+				<img title="About" id="about-img" src="./img/about.png" onclick="toggleConclusion()"/>
+				<div id="conclusion">
+					<h3>Conclusions</h3>
+					<p>It turns out that <i>Calvin & Hobbes</i> and <i>Garfield</i> statistically have similar content. The top ten word categories for each comic are the same, and have generally the same percentage of occurrence</p>
+					<p>On top of that, it appears that <i>Garfield</i> is actually objectively more creative than <i>Calvin & Hobbes</i>. <i>Garfield's</i> content is 47% primary process, whereas <i>Calvin & Hobbes'</i> content is 44% primary process.</p>
+					<p>However, the differences in the result of content analysis were not statistically significant. From the results, we can conclude that both comics are actually similarly creative - from the perspective of naive content analysis.</p>
+				</div>
+				<p>Data from the <a href="http://www.kovcomp.co.uk/wordstat/RID.html">Regressive Imagery Dictionary</a>
+				<p>Calvin & Hobbes © Bill Watterson
 			</div>
-			<img title="About" id="about-img" src="./img/about.png" onclick="showAbout()"/>
-			<p>Data from the <a href="http://www.kovcomp.co.uk/wordstat/RID.html">Regressive Imagery Dictionary</a>
-			<p>Calvin & Hobbes © Bill Watterson
 		</container>
 	</body>
-	<script type="text/javascript" src="hovering.js"></script> 
+	<script type="text/javascript" src="js/hovering.js"></script> 
 </html>

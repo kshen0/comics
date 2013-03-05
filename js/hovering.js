@@ -32,16 +32,67 @@ $.getJSON('./garfielddata/word_freqs.json', function(data) {
 
 // show "about" modal
 $('#about').load('about.html', function() {
-	//setTimeout(function() { showAbout(); }, 2500);
+	setTimeout(function() { showAbout(); }, 2500);
 });
 
 var wordAssociations = {};
 
-$("#calvin-chart").sparkline([14,12,10,11,9,6,5.5,4,3,3,2.1], {
-    type: 'bar',
-    height: '50',
-    barWidth: 10,
-    barSpacing: 25});
+insertCharts();
+function insertCharts() {
+	var categoryList = [];
+	for (var i = 0; i < calvinCategoryInfo.length; i ++) {
+		categoryList.push(calvinCategoryInfo[i]['name']);
+	}
+
+	var values = getValueList(categoryList, calvinCategoryInfo, 1);
+	$("#calvin-chart").sparkline(values, {
+	    type: 'bar',
+	    height: '50',
+	    barWidth: 10,
+	    barSpacing: 65});
+	garfieldCategoryInfo = stupidSort(categoryList, garfieldCategoryInfo);
+	values = getValueList(categoryList, garfieldCategoryInfo, -1);
+	$("#garfield-chart").sparkline(values, {
+	    type: 'bar',
+	    height: '50',
+	    barWidth: 10,
+	    barSpacing: 65});
+};
+
+function stupidSort(valueOrderList, unsortedList) {
+	var sorted = [];
+	for (var i = 0; i < valueOrderList.length; i ++) {
+		for (var j = 0; j < unsortedList.length; j ++) {
+			if (valueOrderList[i] == unsortedList[j]['name']) {
+				sorted.push(unsortedList[j]);
+			}
+		}
+	}
+	return sorted;
+};
+
+function getValueList(categoryList, catInfo, multiplier) {
+	var values = [];
+	for (var i = 0; i < categoryList.length; i ++) {
+		values.push(multiplier * 
+					Math.round(catInfo[i]['percent'] * 10) / 10);
+	}
+	return values;
+	/*
+	var values = [];
+	for (var i = 0; i < categoryList.length; i ++) {
+		for (var j = 0; j < catInfo.length; j ++) {
+			if (catInfo[j]['name'] == categoryList[i]) {
+				values.push(multiplier * 
+							Math.round(catInfo[j]['percent'] * 10) / 10);
+				break;
+			}
+		}
+
+	}
+	return values;
+	*/
+};
 
 insertImages(
 				{
@@ -112,13 +163,12 @@ $(".calvin-tile").hover(
 		if(!clicked["calvin"]) {
 			var name = calvinCategoryInfo[this.id]['name'];
 			highlightImage(name);
-			//displayStats(name);
+			displayStats(name);
 		}
 	},
 	function() {
 		if(!clicked["calvin"]) {
 			var name = calvinCategoryInfo[this.id]['name'];
-			$("#calvin-percent").html("");
 			$("#calvin-stats").html("");
 			$(".pane").css("display", "none");
 			removePanes(name);
@@ -131,19 +181,36 @@ $(".garfield-tile").hover(
 		if(!clicked["garfield"]) {
 			var name = garfieldCategoryInfo[this.id]['name'];
 			highlightImage(name);
-			//displayStats(name);
+			displayStats(name);
 		}
 	},
 	function() {
 		if(!clicked["garfield"]) {
 			var name = garfieldCategoryInfo[this.id]['name'];
-			$("#garfield-percent").html("");
-			$("#garfield-stats").html("");
+			$("#calvin-stats").html("");
 			$(".pane").css("display", "none");
 			removePanes(name);
 		}
 	}
 );
+
+var conclusionVisible = false;
+function toggleConclusion() {
+	if (conclusionVisible) {
+		$('#conclusion').css( {
+								'position': 'absolute',
+								'display': 'none'
+							});
+	}
+	else {
+		$('#conclusion').css( {
+								'position': 'relative',
+								'display': 'block'
+							});
+	}
+	conclusionVisible = !conclusionVisible;
+
+}
 
 function removePanes(name) {
 	$("."+name).each(function(i, obj) {
@@ -171,17 +238,31 @@ function highlightImage(name) {
 
 function displayStats(name) {
 
-	var info = getCategoryInfoByName(name, calvinCategoryInfo); 
+	var cInfo = getCategoryInfoByName(name, calvinCategoryInfo); 
+	var gInfo = getCategoryInfoByName(name, garfieldCategoryInfo); 
+	var cPercent = Math.floor(cInfo['percent'] * 10) / 10; // round to 2 decimal places
+	var gPercent = Math.floor(gInfo['percent'] * 10) / 10; // round to 2 decimal places
+	var cHeader = '<h3 class="calvin-text">' + cPercent + "%</h3>";
+	var gHeader = '<h3 class="garf-text">' + gPercent + "%</h3>";
+	var wordStr = getWordsAsString(cInfo);
+	$("#calvin-stats").html("<h3>" + translations[name] + "</h3>" +
+							"<br>" + 
+							cHeader + "    |    " + gHeader +
+							wordStr );
+	/*
+	$("#calvin-stats").html("<h3>" + translations[name] + ": " + 
+							percent +  "%</h3><br>" + '<div class="wordlist"><p>' + 
+							getWordsAsString(params) + "</div>");
+*	*/
+
+	/*
 	var params = {
 		"charName": "calvin",
 		"info": info, 
 		"freq": calvin_frequencies,
 	}
-	var percent = Math.floor(info['percent'] * 100) / 100; // round to 2 decimal places
-	$("#calvin-stats").html("<h3>" + translations[name] + ": " + 
-							percent +  "%</h3><br>" + '<div class="wordlist"><p>' + 
-							getWordsAsString(params) + "</div>");
-
+	*/
+	/*
 	info = getCategoryInfoByName(name, garfieldCategoryInfo); 
 	params = {
 		"charName": "garfield",
@@ -192,6 +273,7 @@ function displayStats(name) {
 	$("#garfield-stats").html("<h3>" + translations[name] + ": " + 
 							  percent +  "%</h3><br>" + '<div class="wordlist"><p>' + 
 							  getWordsAsString(params) + "</div>");
+	*/
 };
 
 function getCategoryInfoByName(name, categoryInfo) {
@@ -219,8 +301,45 @@ function toggleModal() {
 	modal = !modal;
 }
 
-// params {"name": "charactername", "info", category info dict, "freq": word frequencies}
-function getWordsAsString(params) {
+function getWordsAsString(wordDict) {
+	var name = wordDict['name'];
+	if(name in wordAssociations) {
+		return wordAssociations[name];
+	}
+
+	var str = '<div style="display: inline-block">';
+	var wordlist = wordDict['words'];
+	for(var i = 0; i < wordlist.length; i ++) {
+		var word = wordlist[i];
+		var color = null;
+		// if in both transcripts, make bold
+		if (word in calvin_frequencies && word in garfield_frequencies) {
+			color = "#000";
+			word =  '<strong>' + word + '</strong>';	
+		}
+		// word in calvin only, make blue
+		else if (word in calvin_frequencies) {
+			color = '#0000f0';
+		}
+		// word in garfield only, make orange
+		else if (word in garfield_frequencies) {
+			color = '#FCA519';	
+		}
+		if (color != null) {
+			word = '<div style="display: inline-block; color: ' + color + '">' + 
+					word + "</div>";	
+		}
+		else {
+			word = '<div style="display: inline-block">' + 
+					word + "</div>";	
+		}
+
+		str += word.toLowerCase() + ' ';
+	}
+	str + "</div>";
+	wordAssociations[name] = str;
+	return str;
+	/*
 	var info = params["info"];
 	var name = params["charName"] + info['name'];
 	var frequencies = params["freq"];
@@ -240,4 +359,5 @@ function getWordsAsString(params) {
 	str + "</div>";
 	wordAssociations[name] = str;
 	return str;
+	*/
 }

@@ -64,27 +64,52 @@ h3 {
     box-shadow: 0 0 5px #888;
 }
 
+#comics {
+    float: left;
+}
+
 .onecomic {
     display: block;
     margin: 0px 0 0 0;
     overflow: auto;
 }
 
+.chart {
+    margin-left: 32px;
+}
+
+#x-axis {
+    height: 15px;
+    font-size: 8pt;
+}
+
+#x-axis div {
+    float: left;
+}
+
 .images-box {
     /*margin: 0 auto;*/
-    float: left;
+    /*float: left;*/
     -ms-text-justify: distribute-all-lines;
     text-justify: distribute-all-lines;
-    width: 590px;
-    height: 240px;
+    width: 750px;
+    /*height: 240px;*/
     overflow: none;
     cursor: hand;
     cursor: pointer;
 }
 
+.garf-text {
+    color: #FCA519;
+}
+
+.calvin-text {
+    color: #0000f0;
+}
+
 .tile {
-	width: 118px;
-	height: 118px;
+	width: 75px;
+	height: 75px;
     vertical-align: top;
     display: inline-block;
     *display: inline;
@@ -98,6 +123,26 @@ h3 {
     line-height: 0
 }
 
+#conclusion {
+    display: none;
+    position: absolute;
+}
+
+.wordlist {
+    margin-top: 55px;
+    color: #8A8687;
+    float: left;
+    width: 500px;
+    height: 240px;
+    font-size: 8pt;
+}
+
+#otherstuff {
+    width: 500px;
+    padding-top: 25px;
+}
+
+/*
 .wordlist {
     margin-top: 15px;
     color: #8A8687;
@@ -106,4 +151,5 @@ h3 {
     height: 240px;
     font-size: 8pt;
 }
+*/
 
